@@ -1,0 +1,40 @@
+---
+skip: {{ not include_tests or (project_type != "react" and project_type != "react-tailwind" and project_type != "react-shadcn") }}
+---
+import { test, expect } from "bun:test";
+import { render, screen, fireEvent } from "@testing-library/react";
+import App from "./App";
+
+test("renders app title", () => {
+  render(<App />);
+  const titleElement = screen.getByText("{{ name | pascal_case }}");
+  expect(titleElement).toBeDefined();
+});
+
+test("renders initial count", () => {
+  render(<App />);
+  const countElement = screen.getByText("0");
+  expect(countElement).toBeDefined();
+});
+
+test("increment button works", () => {
+  render(<App />);
+  const incrementButton = screen.getByText("Increment");
+  const countElement = screen.getByText("0");
+  
+  fireEvent.click(incrementButton);
+  expect(screen.getByText("1")).toBeDefined();
+});
+
+test("reset button works", () => {
+  render(<App />);
+  const incrementButton = screen.getByText("Increment");
+  const resetButton = screen.getByText("Reset");
+  
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  expect(screen.getByText("2")).toBeDefined();
+  
+  fireEvent.click(resetButton);
+  expect(screen.getByText("0")).toBeDefined();
+}); 

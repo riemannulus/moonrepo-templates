@@ -1,0 +1,70 @@
+{
+  "name": "{{ name | kebab_case }}",
+  "version": "1.0.0",
+  "description": "{{ description }}",
+  {% if author %}
+  "author": "{{ author }}",
+  {% endif %}
+  "main": "{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}src/index.tsx{% else %}src/index.ts{% endif %}",
+  "type": "module",
+  "scripts": {
+    {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+    "dev": "bun run --watch src/index.tsx",
+    "build": "bun build src/index.tsx --outdir ./dist --target browser",
+    {% else %}
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist",
+    {% endif %}
+    "start": "bun run src/index.{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}tsx{% else %}ts{% endif %}",
+    {% if include_tests %}
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    {% endif %}
+    "clean": "rm -rf dist node_modules"
+  },
+  {% if project_type != "minimal" %}
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+    {% if include_tests %}
+    ,
+    "@types/jest": "^29.0.0"
+    {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+    ,
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "jsdom": "^23.0.0"
+    {% endif %}
+    {% endif %}
+    {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+    ,
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0"
+    {% endif %}
+    {% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+    ,
+    "tailwindcss": "^3.0.0",
+    "autoprefixer": "^10.0.0",
+    "postcss": "^8.0.0"
+    {% endif %}
+  },
+  {% endif %}
+  {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+    {% if project_type == "react-shadcn" %}
+    ,
+    "@radix-ui/react-slot": "^1.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.263.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.0"
+    {% endif %}
+  },
+  {% endif %}
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+} 

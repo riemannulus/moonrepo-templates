@@ -1,0 +1,101 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+# Project metadata
+project:
+  name: '{{ name | pascal_case }}'
+  description: '{{ description }}'
+  {% if author %}
+  maintainers: ['{{ author }}']
+  {% endif %}
+
+# Primary language
+language: 'typescript'
+
+# Technology stack
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+stack: 'frontend'
+{% else %}
+stack: 'systems'
+{% endif %}
+
+# Project tags for categorization
+tags:
+  - 'bun'
+  - 'typescript'
+  {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+  - 'react'
+  - 'frontend'
+  {% endif %}
+  {% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+  - 'tailwind'
+  {% endif %}
+  {% if project_type == "react-shadcn" %}
+  - 'shadcn'
+  - 'ui'
+  {% endif %}
+  {% if include_tests %}
+  - 'testing'
+  {% endif %}
+
+# Toolchain configuration
+toolchain:
+  default: 'bun'
+
+# Project tasks
+tasks:
+  # Development task
+  dev:
+    command: 'bun'
+    args: ['run', 'dev']
+    description: {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}'Start development server'{% else %}'Run in development mode'{% endif %}
+    local: true
+    options:
+      cache: false
+
+  # Build task
+  build:
+    command: 'bun'
+    args: ['run', 'build']
+    description: 'Build for production'
+    inputs: ['src/**/*', 'package.json', 'tsconfig.json'{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}, 'index.html'{% endif %}{% if project_type == "react-tailwind" or project_type == "react-shadcn" %}, 'tailwind.config.js'{% endif %}]
+    outputs: ['dist/**/*']
+
+  # Start task
+  start:
+    command: 'bun'
+    args: ['run', 'start']
+    description: 'Start the application'
+    deps: ['build']
+    local: true
+
+  {% if include_tests %}
+  # Test task
+  test:
+    command: 'bun'
+    args: ['run', 'test']
+    description: 'Run tests'
+    inputs: ['src/**/*', 'package.json', 'tsconfig.json']
+
+  # Test watch task
+  test-watch:
+    command: 'bun'
+    args: ['run', 'test:watch']
+    description: 'Run tests in watch mode'
+    local: true
+    options:
+      cache: false
+  {% endif %}
+
+  # Clean task
+  clean:
+    command: 'bun'
+    args: ['run', 'clean']
+    description: 'Clean build artifacts and dependencies'
+
+  # Install dependencies
+  install:
+    command: 'bun'
+    args: ['install']
+    description: 'Install dependencies'
+    inputs: ['package.json']
+    outputs: ['node_modules/**/*'] 

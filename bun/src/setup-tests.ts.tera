@@ -1,0 +1,17 @@
+---
+skip: {{ not include_tests }}
+---
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+import "@testing-library/jest-dom";
+
+// Setup jsdom environment for React testing
+import { JSDOM } from "jsdom";
+
+const dom = new JSDOM("<!DOCTYPE html><html><body><div id=\"root\"></div></body></html>");
+global.document = dom.window.document;
+global.window = dom.window as any;
+global.navigator = dom.window.navigator;
+{% else %}
+// Test setup for {{ name | pascal_case }}
+console.log("Setting up tests for {{ name | pascal_case }}");
+{% endif %} 

@@ -1,0 +1,86 @@
+---
+skip: {{ project_type != "react" and project_type != "react-tailwind" and project_type != "react-shadcn" }}
+---
+import React, { useState } from "react";
+{% if project_type == "react-shadcn" %}
+import { Button } from "./components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
+{% endif %}
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    {% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      {% if project_type == "react-shadcn" %}
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold text-gray-800">
+            {{ name | pascal_case }}
+          </CardTitle>
+          <CardDescription>
+            {{ description }}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-center space-y-4">
+          <div className="text-4xl font-bold text-blue-600">{count}</div>
+          <div className="space-y-2">
+            <Button onClick={() => setCount(count + 1)} className="w-full">
+              Increment
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setCount(0)}
+              className="w-full"
+            >
+              Reset
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      {% else %}
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
+          {{ name | pascal_case }}
+        </h1>
+        <p className="text-center text-gray-600 mb-6">{{ description }}</p>
+        <div className="text-center">
+          <div className="text-4xl font-bold text-blue-600 mb-4">{count}</div>
+          <div className="space-y-2">
+            <button
+              onClick={() => setCount(count + 1)}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+            >
+              Increment
+            </button>
+            <button
+              onClick={() => setCount(0)}
+              className="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% else %}
+    <div>
+      <div style="text-align: center; padding: 2rem;">
+        <h1>{{ name | pascal_case }}</h1>
+        <p>{{ description }}</p>
+        <div style="margin: 2rem 0;">
+          <h2 style="font-size: 2rem; margin: 1rem 0;">{count}</h2>
+          <button onClick={() => setCount(count + 1)}>Increment</button>
+          <button onClick={() => setCount(0)} style="margin-left: 1rem;">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  );
+}
+
+export default App; 

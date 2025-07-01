@@ -1,0 +1,147 @@
+# {{ name | pascal_case }}
+
+{{ description }}
+
+{% if author %}**Author:** {{ author }}{% endif %}
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Bun](https://bun.sh) installed on your system
+
+### Installation
+
+```bash
+# Install dependencies
+bun install
+```
+
+### Development
+
+```bash
+# {% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}Start development server{% else %}Run in development mode{% endif %}
+bun run dev
+```
+
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+This will start the development server. Open your browser and navigate to the local server to see your application.
+{% else %}
+{% if project_type == "minimal" %}
+This will run your application and watch for changes.
+{% else %}
+This will start the server on `http://localhost:3000` and watch for changes.
+
+### Endpoints
+
+- `GET /` - Main endpoint
+- `GET /health` - Health check endpoint
+{% endif %}
+{% endif %}
+
+### Production
+
+```bash
+# Build for production
+bun run build
+
+# Start production server
+bun run start
+```
+
+{% if include_tests %}
+### Testing
+
+```bash
+# Run tests
+bun run test
+
+# Run tests in watch mode
+bun run test:watch
+```
+{% endif %}
+
+## 📁 Project Structure
+
+```
+{{ name | kebab_case }}/
+├── src/
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+│   ├── index.tsx           # React app entry point
+│   ├── App.tsx             # Main App component
+{% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+│   ├── styles.css          # TailwindCSS styles
+{% endif %}
+{% if project_type == "react-shadcn" %}
+│   └── components/
+│       ├── ui/             # shadcn/ui components
+│       └── utils.ts        # Utility functions
+{% endif %}
+{% if include_tests %}
+│   ├── App.test.tsx        # Component tests
+│   └── setup-tests.ts      # Test setup
+{% endif %}
+{% else %}
+│   ├── index.ts            # Main entry point
+{% if include_tests %}
+│   ├── index.test.ts       # Application tests
+│   └── setup-tests.ts      # Test setup
+{% endif %}
+{% endif %}
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── bunfig.toml             # Bun configuration
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+├── index.html              # HTML template
+{% endif %}
+{% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+├── tailwind.config.js      # TailwindCSS configuration
+{% endif %}
+└── README.md               # This file
+```
+
+## 🛠️ Technology Stack
+
+- **Runtime:** [Bun](https://bun.sh)
+- **Language:** TypeScript
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+- **Frontend:** React 18
+{% endif %}
+{% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+- **Styling:** TailwindCSS
+{% endif %}
+{% if project_type == "react-shadcn" %}
+- **UI Components:** shadcn/ui
+{% endif %}
+{% if include_tests %}
+- **Testing:** Bun test{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %} + React Testing Library{% endif %}
+{% endif %}
+
+## 📜 Available Scripts
+
+- `bun run dev` - Start development server
+- `bun run build` - Build for production
+- `bun run start` - Start production server
+{% if include_tests %}
+- `bun run test` - Run tests
+- `bun run test:watch` - Run tests in watch mode
+{% endif %}
+- `bun run clean` - Clean build artifacts and dependencies
+
+## 📚 Learn More
+
+- [Bun Documentation](https://bun.sh/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+{% if project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" %}
+- [React Documentation](https://reactjs.org/docs/)
+{% endif %}
+{% if project_type == "react-tailwind" or project_type == "react-shadcn" %}
+- [TailwindCSS Documentation](https://tailwindcss.com/docs)
+{% endif %}
+{% if project_type == "react-shadcn" %}
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+{% endif %}
+
+---
+
+Generated with ❤️ using moonrepo templates 

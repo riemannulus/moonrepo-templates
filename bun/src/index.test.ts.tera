@@ -1,0 +1,29 @@
+---
+skip: {{ not include_tests or project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" }}
+---
+import { test, expect } from "bun:test";
+{% if project_type == "minimal" %}
+import { greet } from "./index";
+
+test("greet function", () => {
+  expect(greet("World")).toBe("Hello, World!");
+  expect(greet("{{ name | pascal_case }}")).toBe("Hello, {{ name | pascal_case }}!");
+});
+{% else %}
+test("server health check", async () => {
+  const response = await fetch("http://localhost:3000/health");
+  expect(response.status).toBe(200);
+  
+  const data = await response.json();
+  expect(data.status).toBe("ok");
+  expect(data.timestamp).toBeDefined();
+});
+
+test("server root endpoint", async () => {
+  const response = await fetch("http://localhost:3000/");
+  expect(response.status).toBe(200);
+  
+  const text = await response.text();
+  expect(text).toBe("Hello from {{ name | pascal_case }}!");
+});
+{% endif %} 

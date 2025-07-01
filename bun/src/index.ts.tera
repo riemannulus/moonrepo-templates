@@ -1,0 +1,53 @@
+---
+skip: {{ project_type == "react" or project_type == "react-tailwind" or project_type == "react-shadcn" }}
+---
+{% if project_type == "minimal" %}
+// {{ name | pascal_case }} - {{ description }}
+console.log("Hello from {{ name | pascal_case }}!");
+
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+{% else %}
+/**
+ * {{ name | pascal_case }} - {{ description }}
+ * {% if author %}Author: {{ author }}{% endif %}
+ */
+
+import { serve } from "bun";
+
+const port = process.env.PORT || 3000;
+
+// Simple HTTP server example
+const server = serve({
+  port,
+  fetch(request) {
+    const url = new URL(request.url);
+    
+    if (url.pathname === "/") {
+      return new Response("Hello from {{ name | pascal_case }}!", {
+        headers: { "Content-Type": "text/plain" },
+      });
+    }
+    
+    if (url.pathname === "/health") {
+      return new Response(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    
+    return new Response("Not Found", { status: 404 });
+  },
+});
+
+console.log(`🚀 {{ name | pascal_case }} server running on http://localhost:${port}`);
+
+// Graceful shutdown
+process.on("SIGINT", () => {
+  console.log("👋 Shutting down server...");
+  server.stop();
+  process.exit(0);
+});
+
+export default server;
+{% endif %} 

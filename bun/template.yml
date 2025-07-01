@@ -1,0 +1,41 @@
+$schema: 'https://moonrepo.dev/schemas/template.json'
+
+title: 'Bun Project'
+description: |
+  Initialize a new Bun project with TypeScript support.
+  Choose between a minimal setup, basic project, or React project with optional TailwindCSS and shadcn/ui.
+
+destination: './{{ name | kebab_case }}'
+
+variables:
+  name:
+    type: 'string'
+    prompt: 'Enter project name:'
+    default: 'my-bun-project'
+
+  description:
+    type: 'string'
+    prompt: 'Enter project description:'
+    default: 'A new Bun project'
+
+  author:
+    type: 'string'
+    prompt: 'Enter author name:'
+    default: ''
+
+  project_type:
+    type: 'enum'
+    prompt: 'Select project type:'
+    multiple: false
+    values:
+      - minimal
+      - basic
+      - react
+      - react-tailwind
+      - react-shadcn
+    default: 'basic'
+
+  include_tests:
+    type: 'boolean'
+    prompt: 'Include test setup?'
+    default: true 
